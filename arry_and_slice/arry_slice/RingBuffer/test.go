@@ -59,6 +59,16 @@ func (rb *RingBuffer[T]) Display() {
 	fmt.Println("Elements:", rb.buf)
 }
 
+//Peek 返回队头元素但不移除它
+func (rb *RingBuffer[T]) Peek() (T, bool) {
+	if rb.size == 0 {
+		var zero T
+		return zero, false // 空队列，返回默认值
+	} else {
+		return rb.buf[rb.head], true
+	}
+}
+
 func main() {
 	rb := NewRingBuffer[int](5) // 创建一个容量为 5 的环形队列
 
@@ -73,9 +83,16 @@ func main() {
 		value, ok := rb.Dequeue()
 		if ok {
 			fmt.Printf("Dequeued: %d\n", value)
+			peekValue, ok := rb.Peek()
+			if ok {
+				fmt.Printf("Peeked: %d\n", peekValue)
+			} else {
+				fmt.Println("Queue is empty!")
+			}
 		} else {
 			fmt.Println("Queue is empty!")
 		}
 		rb.Display()
 	}
+
 }
